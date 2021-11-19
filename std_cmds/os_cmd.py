@@ -8,13 +8,13 @@ os_cmds_registry = {}
 
 @std.res.register(os_cmds_registry)
 def exit():
-    return [2, std.err.ProcessDied(None, 'Process died.')]
+    return 2, std.err.MagmaException(None, 'Process died.')
 
 @std.res.register(os_cmds_registry)
 def ls():
 	for i in os.listdir("./"):
 		print(i)
-	return [0, None]
+	return 0, None
 
 @std.res.register(os_cmds_registry)
 def clear():
@@ -25,5 +25,5 @@ def clear():
 		print("system:")
 		os.system("cls")
 	else:
-		return [1, std.err.UnsupportedPlatform(None, f"Unsupported command for \"{platform}\".")]
-	return [0, None]
+		return 1, std.err.MagmaException(None, f"Unsupported command for \"{platform}\".")
+	return 0, None
