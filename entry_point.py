@@ -15,9 +15,9 @@ try:
 		entry_exit_code = process(user_input)
 
 		if entry_exit_code[0] == 1:
-			print(entry_exit_code[1].errors)
+			print("\n" + entry_exit_code[1].errors)
 		elif entry_exit_code[0] == 2:
-			print(entry_exit_code[1].errors)
+			print("\n" + entry_exit_code[1].errors)
 			break
 
 except KeyboardInterrupt:

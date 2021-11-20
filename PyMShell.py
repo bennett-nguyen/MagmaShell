@@ -25,6 +25,9 @@ def process(user_in):
 	if not exit_code[0] and exit_code[1] is not None:
 		return 2, std.err.MagmaException(None, f"{cmd[0]} returned an exception while the exit status is \"0\".") 
 	
+	if exit_code[0] in [1, 2] and not isinstance(exit_code[1], std.err.MagmaException):
+		return 2, std.err.MagmaException(None, f"\"{cmd[0]}\" exited with failed status but no exception was given or invalid exception.")
+
 	return exit_code
 
 
