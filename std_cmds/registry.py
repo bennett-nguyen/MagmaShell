@@ -24,9 +24,11 @@ for entry in os.listdir("./std_cmds"):
             name=f".{entry[:-3]}",
             package="std_cmds"
         )
-
-        registered_cmds.update(
-            {
-                **getattr(module, f"{entry[4:-3]}_registry")
-            }
-        )
+        try:
+            registered_cmds.update(
+                {
+                    **getattr(module, f"{entry[4:-3]}_registry")
+                }
+            )
+        except AttributeError as e:
+            print(e)

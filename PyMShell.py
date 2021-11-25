@@ -15,7 +15,7 @@ def process(user_in):
     if cmd[0] not in registered_cmds:
         return MagmaException(f"{cmd[0]}: command not found", 1)
 
-    exit_code = registered_cmds[cmd[0]]()
+    exit_code = registered_cmds[cmd[0]](*cmd[1:])
 
     if exit_code is None:
         return MagmaException(f'Expected "{cmd[0]}" to return an exit code but None was returned.', 2)
