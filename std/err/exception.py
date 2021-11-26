@@ -1,7 +1,4 @@
 from std.utils import type_checker
-# functions, variables, etc... which starts with a "_" is a hidden part of the module and can't be access from outside
-
-
 
 class MagmaException(Exception):
 
