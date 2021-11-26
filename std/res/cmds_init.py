@@ -1,22 +1,13 @@
 from std.err import MagmaException
-# TODO: add user-specific options
-# NOTE: This decoractor helps creating shell cmds, required one more args
+from std.utils import type_checker, init_help_message
 
 
 def register(cmds_registry: dict, options: list = None):
     def decorator(function):
 
+        # Initialize command's help message
         if options:
-
-            help_var = ""
-            index = 0
-
-            # Initialize command's help message
-            for option in options:
-                help_var = f"{help_var}\n{option['name']} {[choice for choice in option['choices']]}"
-                index += 1
-
-            function.__doc__ = f'{function.__name__}:\n' + help_var
+            init_help_message(function, options)
 
         def wrapper(*args):
 
@@ -45,6 +36,7 @@ def register(cmds_registry: dict, options: list = None):
 
 
 def create_option(name: str, option_type, required: bool, choices: list = None) -> dict:
+    type_checker([(name, str), (required, bool)])
 
     return {
         "name": name,
@@ -54,7 +46,9 @@ def create_option(name: str, option_type, required: bool, choices: list = None) 
     }
 
 
-def create_choice(name, value) -> dict:
+def create_choice(name: str, value) -> dict:
+    type_checker([(name, str)])
+
     return {
         "name": name,
         "value": value
