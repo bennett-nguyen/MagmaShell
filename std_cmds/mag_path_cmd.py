@@ -42,6 +42,6 @@ def cd():
         ]
     )
 ])
-def echo(*kwargs):
+def echo(*args, **kwargs):
     pass
     return 0
