@@ -15,7 +15,7 @@ try:
 
         entry_exit_code = process(user_input)
 
-        if type(entry_exit_code) is int and not entry_exit_code or not entry_exit_code.show_warning:
+        if type(entry_exit_code) is int and not entry_exit_code or not entry_exit_code.show_error:
             continue
 
         match entry_exit_code.exit_status:
