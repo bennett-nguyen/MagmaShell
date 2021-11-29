@@ -17,31 +17,21 @@ def cd():
     print("changed to D:\lol.py")
     return 0
 
-
 @register(path_cmd_registry, options=[
     create_option(
         name="-something",
         option_type=str,
-        required=True,
         choices=[
             create_choice(
-                name='hi',
-                value="hi"
-            )
-        ]
-    ),
-    create_option(
-        name="-something else",
-        option_type=str,
-        required=True,
-        choices=[
-            create_choice(
-                name="aaa",
-                value="foo"
+                name="message",
+                value="hello world!"
             )
         ]
     )
 ])
+
 def echo(*args, **kwargs):
-    pass
+    """
+    Print out hello world!
+    """
     return 0
