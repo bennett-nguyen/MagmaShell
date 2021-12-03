@@ -30,7 +30,7 @@ def cd():
 
 def echo(*args, **kwargs):
     """
-    Print out hello world!
+    Print out anything from argument.
     """
     print(kwargs["option"]["choices"]["value"])
     return 0
