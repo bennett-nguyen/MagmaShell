@@ -2,7 +2,8 @@ import std
 
 
 class MagmaException(Exception):
-
+    __slots__ = "errors", "exit_status", "show_error", "message"
+    
     def __init__(self, errors: str, exit_status: int, show_error: bool = True, message = None):
         if message is None:
             message = ""
