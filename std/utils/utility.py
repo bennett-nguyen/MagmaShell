@@ -1,8 +1,20 @@
 import inspect
 import std
 
+_type_table = {
+    "str": str,
+    "int": int,
+    "float": float,
+    "bool": bool
+}
+
 
 class GlobalUtils:
+
+    @staticmethod
+    def value_type_converter(desired_value_type: str, value):
+        return _type_table[desired_value_type](value)
+
     @staticmethod
     def type_checker(list_of_args: list):
         for arg in list_of_args:
@@ -44,7 +56,7 @@ class CmdsInitUtils:
         )
         def spam(*args, **kwargs):
             '''
-            Example funtion.
+            Example function.
             '''
             return 0
 
@@ -89,14 +101,28 @@ class CmdsInitUtils:
 
             for option in options:
                 if args[0] == option["name"]:
-                    try:
-                        option["choices"] = option["option_type"](args[1])
-                    except IndexError:
-                        print(f"Expected a choice for '{option['name']}'")
-                    except ValueError:
-                        return std.err.MagmaException(f"Invalid option type '{option['option_type'].__name__}' for '{args[1]}' choice.", 2)
+                    for choice in option["choices"]:
+                        if choice['dynamic']:
+                            try:
+                                return_option = {}
+                                return_option.update(option)
+                                return_option['choices'] = choice
+                                value = args[2]
+                                if args[1] == "str":
+                                    value = " ".join(args[2:])
+                                return_option['choices']['value'] = GlobalUtils.value_type_converter(
+                                    args[1], value)
+                                return function(option=return_option)
+                            except Exception as e:
+                                print(e)
 
-                    return function(option=option)
+                        elif choice['name'] == args[1]:
+                            return_option = {}
+                            return_option.update(option)
+                            return_option['choices'] = choice
+                            return function(option=return_option)
+                    else:
+                        return std.err.MagmaException(f"'{args[1]}' choice not found.", 1)
 
             else:
                 return std.err.MagmaException(f"'{args[0]}' option not found.", 1)
@@ -104,14 +130,15 @@ class CmdsInitUtils:
         return function()
 
     @staticmethod
-    def duplicate_checker(function, options):
+    def option_inspector(function, options):
         '''
-        Check if a command has duplicate options/choices
+        Check if a command has duplicate options/choices/dynamically typed choices.
 
         Syntax:
         Duplicate option(s): {options}; of command 'command'
-        Duplicate choice(s): [{choice, option, command}]
+        Duplicate choice(s): [{choice, dynamic, option, command}]
         '''
+
         # check for duplicate options
         options_names = [option["name"] for option in options]
         duplicate_options = set(
@@ -121,21 +148,7 @@ class CmdsInitUtils:
             raise std.err.MagmaException(
                 message=f"\n\nDuplicate option(s): {duplicate_options}; of command: '{function.__name__}'", errors="", exit_status=2
             )
-        
+
         # check for duplicate choices
-        choices = []
-
-        for option in options:
-            if option["choices"]:
-                temp_list = [(choice["name"], option["name"], function.__name__)
-                             for choice in option["choices"]]
-                choices.extend(temp_list)
-
-        duplicate_choices = set(
-            [choice for choice in choices if choices.count(choice) > 1]
-        )
-
-        if duplicate_choices:
-            raise std.err.MagmaException(
-                message=f"\n\nDuplicate choice(s): {duplicate_choices}", errors="", exit_status=2
-            )
+        # still in revamp
+        # choices = []
