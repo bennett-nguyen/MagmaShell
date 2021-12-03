@@ -13,18 +13,16 @@ def pwd():
 
 @register(path_cmd_registry)
 def cd():
-    # test command
     print("changed to D:\lol.py")
     return 0
 
 @register(path_cmd_registry, options=[
     create_option(
-        name="-something",
-        option_type=str,
+        name="-m",
         choices=[
             create_choice(
-                name="message",
-                value="hello world!"
+                name="dynamic-choice",
+                dynamic=True
             )
         ]
     )
@@ -34,4 +32,5 @@ def echo(*args, **kwargs):
     """
     Print out hello world!
     """
+    print(kwargs["option"]["choices"]["value"])
     return 0
